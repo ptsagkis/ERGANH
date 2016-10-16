@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+   
+    
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+    
+    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/jslibs/ol.css" />
+    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/jslibs/datepicker.css" />  
+    <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/css/myapp.css" />
+
+    <title>ΕΡΓΑΝΗ DEMO </title>
+    <style>
+      
+    </style>
+    
+    
+    <script type="text/javascript">
+	   var params = {
+     
+     }
+    </script>   
+  </head>
+  <body>
+  <div id="dvLoading"></div>
+  <div class="container">
+  <div class="row appHeader" >
+        <div class="col-sm-2">
+         <h4>Επιλογές</h4>
+        </div>
+        <div class="col-sm-8"">
+        <h4>Χάρτης</h4>
+        </div>
+        <div class="col-sm-2"">
+        <h4>Ρυθμίσεις/Υπόμνημα Δεδομένων</h4> 
+        </div>
+  </div>
+  
+  <div class="row">
+    <!-- options here -->
+    <div class="col-sm-2">
+      
+             <form>
+             
+              <div class="form-group">
+              <label for="signifierselector">Δείκτης</label>
+              <select id="signifierselector" class="form-control">
+                   <option value="E3_PROSL" >Ε3 Αναγγελίες Πρόσληψης</option>
+                   <option value="E5_APOX" >Ε5 Αναγγελίες Οικειοθελούς Αποχώρησης</option>
+                   <option value="E6_KATAG" >Ε6 Καταγγελίες Συμβάσεων Αορίστου Χρόνου</option>
+                   <option value="E7_TIMOUT" >Ε7 Λήξεις Συμβάσεων Ορισμένου Χρόνου</option>
+                   <option value="E567_APOX" >Ε5+Ε6+Ε7 ΣΥΝΟΛΟ ΑΠΟΧ/ΣΕΩΝ</option>
+                   <option value="E567_ISOZ">Ε3-(Ε5+Ε6+Ε7) ΙΣΟΖΥΓΙΟ</option>
+                   
+              </select>
+              </div>
+             
+             
+              <div class="form-group">
+                  <label for="datepicker1">Από</label>
+                  <input type="text" id="datepicker1" class="form-control" value="08/2016"  >
+                  <small id="emailHelp" class="form-text text-muted">Δεδομένα μόνο για Αύγουστο.</small>
+              </div>
+              
+              <div class="form-group">
+                  <label for="datepicker2">Εώς</label>
+                  <input type="text" id="datepicker2" class="form-control" value="08/2016" >
+              </div>   
+                
+              
+               
+               
+               <div class="form-group">
+              <label for="methodselector">Μέθοδος</label>
+              <select id="methodselector" class="form-control">
+                   <option value="method_EI" >Equal Interval</option>
+                   <option value="method_Q" >Quantile</option>
+                   <option value="method_SD" >Standard Deviation</option>
+                   <option value="method_AP" >Arithmetic Progression</option>
+                   <option value="method_GP" >Geometric Progression</option>
+                   <option value="method_CJ">Class Jenks</option>
+                   
+              </select>
+              </div>   
+              
+              
+               
+                <div class="form-group">   
+                <label for="classspiner">Πλήθος Κλάσεων</label>        
+                  <div id="classspiner" class="input-group spinner">
+                    <input id="classpsinerval" type="text" class="form-control" value="4">
+                    <div class="input-group-btn-vertical">
+                      <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-chevron-up"></i></button>
+                      <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="colorpicker1">Χρώμα από</label>
+                  <input type="button" id="colorpicker1" class="form-control jscolor btn btn-default" value="FFFFFF" >
+              </div>
+              
+              <div class="form-group">
+                  <label for="colorpicker2">Χρώμα εώς</label>
+                  <input type="button" id="colorpicker2" class="form-control jscolor btn btn-default" value="1A8B16" >
+              </div>
+      
+      
+             <input type="button" onClick="geMapThemmatic();" class="form-control btn btn-info" value="Submit Button">
+         </form>
+      </div> 
+      
+      
+    <!-- map here -->
+    <div class="col-sm-8"">
+      <div id="map" ></div>
+    </div>
+    <!-- legend here -->
+    <div class="col-sm-2">
+       <div id="mapoptions">      
+          <div class="form-group">
+              <label for="tileselector">Υπόβαθρο</label>
+              <select onchange="setTile(this)" id="tileselector" class="form-control">
+                <option value="gsat">Google Sat</option>
+                <option value="OSM">OSM</option>     
+              </select>
+          </div>
+        </div>
+       <div id="legend"></div>
+    </div>
+    
+  </div>
+</div>
+ 
+    <script src="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/jslibs/jquery_1.12.2.min.js"></script>
+   	<script src="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/jslibs/bootstrap_3.3.6.min.js"></script>
+    <script src="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/jslibs/bootstrap-datepicker.js"></script>
+    <script src="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/jslibs/jscolor.min.js"></script>
+    <script src="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/jslibs/ol-debug.js"></script>
+    <script src="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/jslibs/chroma.min.js"></script>
+    <script src="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/jslibs/geostats.js"></script>
+    
+    <script src="https://raw.githubusercontent.com/ptsagkis/ERGANH/master/ergani_src/js/app.js"></script>
+    
+    <script type="text/javascript">
+    $( document ).ready(function() {
+     //and let the game begin
+    
+      $("#datepicker1").datepicker( {
+      format: "mm/yyyy",
+      startView: "months", 
+      minViewMode: "months"
+      });
+      $("#datepicker2").datepicker( {
+      format: "mm/yyyy",
+      startView: "months", 
+      minViewMode: "months"
+      }); 
+      
+        $('.spinner .btn:first-of-type').on('click', function() {
+        $('.spinner input').val( parseInt($('.spinner input').val(), 10) + 1);
+        });
+        $('.spinner .btn:last-of-type').on('click', function() {
+          $('.spinner input').val( parseInt($('.spinner input').val(), 10) - 1);
+        });
+        
+        
+        
+        
+        
+     initMap();   
+    });
+       
+    
+    </script>
+    
+  </body>
+</html>
