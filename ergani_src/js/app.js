@@ -236,7 +236,7 @@ function getAndSetClassesFromData(data, numclasses, method, signifier) {
   var color_x = chroma.scale([getColorFrom(), getColorTo()]).colors(numclasses)
 
   serie.setColors(color_x);
-  document.getElementById('legend').innerHTML = serie.getHtmlLegend(null, "ΕΡΓΑΝΗ DATA </br> "+signLabel+" </br> Από: " + getDateFrom() + ", Εώς: " + getDateTo() +"</br> Μέθοδος:"+methodLabel, 1);
+  document.getElementById('legend').innerHTML = serie.getHtmlLegend(null, "ΕΡΓΑΝΗ DATA </br> "+signLabel+" </br> Από: " + getDateFrom() + "</br> Εώς: " + getDateTo() +"</br> Μέθοδος:"+methodLabel, 1);
   classSeries = serie;
   classColors = color_x;
 }
