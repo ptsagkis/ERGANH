@@ -14,7 +14,7 @@ var nomoiLayer = new ol.layer.Vector({
   style: setStyle
   })
 });
-
+//my tile layers
 var raster1 = new ol.layer.Tile({
   visible:true,
   source: new ol.source.OSM({
@@ -66,7 +66,7 @@ ergadataVals = new Array();
       var columnToFind = signifier;
       var value = getValFromCode(ergdata, feat_esid, columnToFind);
       ergadataVals.push(value);
-      console.log("value",value)
+      //console.log("value",value)
       feat.set("STYLEVAL", value);
       //siplify the geometry to improve performance
       //feat.setGeometry(feat.getGeometry().simplify(100));
