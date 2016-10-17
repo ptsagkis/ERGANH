@@ -165,6 +165,64 @@ map = new ol.Map({
   }
 });
 //loadErganiData();
+/**
+ * Popup
+ **/
+var container = document.getElementById('popup'),
+    content_element = document.getElementById('popup-content'),
+    closer = document.getElementById('popup-closer');
+
+closer.onclick = function() {
+    overlay.setPosition(undefined);
+    closer.blur();
+    return false;
+};
+var overlay = new ol.Overlay({
+    element: container,
+    autoPan: true,
+    offset: [0, -10]
+});
+map.addOverlay(overlay);
+
+var fullscreen = new ol.control.FullScreen();
+map.addControl(fullscreen);
+
+map.on('click', function(evt){
+var coord  = map.getCoordinateFromPixel(evt.pixel);
+    var feature = map.forEachFeatureAtPixel(evt.pixel,
+      function(feature, layer) {
+        return feature;
+      });
+    if (feature) {
+        console.log("feature",feature);
+        var geometry = feature.getGeometry();
+      /**  var coord;
+        if (feature.getGeometry().getType() === 'MultiPolygon') {
+          coord = getMaxPoly(feature.getGeometry().getPolygons()).getInteriorPoint().getCoordinates();
+        } else if (feature.getGeometry().getType() === 'Polygon') {
+          coord = feature.getGeometry().getInteriorPoint().getCoordinates();
+        }
+        
+       */ 
+        var content = '<h4>'+ feature.get('NAME_ENG') + '</h4>';
+        content += '<h5>Τιμές:' + feature.get('STYLEVAL') + '</h5>';
+        content += '<h5>Πληθυσμός:' + feature.get('pop') + '</h5>';
+        content += '<h5>ESYE ID:' + feature.get('ESYE_ID') + '</h5>';
+        content_element.innerHTML = content;
+        overlay.setPosition(coord);
+        
+        console.info(feature.getProperties());
+    }
+});
+map.on('pointermove', function(e) {
+    if (e.dragging) return;
+       
+    var pixel = map.getEventPixel(e.originalEvent);
+    var hit = map.hasFeatureAtPixel(pixel);
+    
+    map.getTarget().style.cursor = hit ? 'pointer' : '';
+});
+
 }
 
 
@@ -328,3 +386,5 @@ function getColorTo(){
 var val =  $('#colorpicker2').val();
 return val;
 }
+
+
