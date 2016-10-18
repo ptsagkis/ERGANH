@@ -159,7 +159,11 @@ map = new ol.Map({
 });
 
  var listenerKey = nomoiLayer.getSource().on('change', function(e) {
-  if (nomoiLayer.getSource().getState() == 'ready') {
+  if (nomoiLayer.getSource().getState() == 'ready') {  
+      nomoiLayer.getSource().getFeatures().forEach(function(feat) {
+          feat.set("STYLEVAL", null);
+        });
+  
   ol.Observable.unByKey(listenerKey);
   $('#dvLoading').fadeOut(2000);
   }
